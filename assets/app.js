@@ -140,3 +140,51 @@ document.addEventListener('DOMContentLoaded',()=>{
   clips.forEach(v=>io.observe(v));
  }else if(!reduced){clips.forEach(v=>v.play().catch(()=>{}));}
 });
+
+
+/* HEBREROLAB — cinematic navigation and editorial interaction pass */
+document.addEventListener('DOMContentLoaded',()=>{
+ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const internal=[...document.querySelectorAll('a[href]')].filter(a=>{
+  const href=a.getAttribute('href')||'';
+  return href&&!href.startsWith('#')&&!href.startsWith('mailto:')&&!href.startsWith('tel:')&&!a.hasAttribute('download')&&a.target!=='_blank'&&a.origin===location.origin;
+ });
+ const current=location.pathname.split('/').pop()||'index.html';
+ document.querySelectorAll('.main-nav a').forEach(a=>{
+  const target=(a.getAttribute('href')||'').split('/').pop();
+  if(target===current){a.classList.add('is-current');a.setAttribute('aria-current','page');}
+ });
+ if(!reduce){
+  const curtain=document.createElement('div');
+  curtain.className='hl-page-curtain';
+  curtain.setAttribute('aria-hidden','true');
+  curtain.innerHTML='<span>HEBRERO<span>/</span>LAB</span>';
+  document.body.appendChild(curtain);
+  requestAnimationFrame(()=>curtain.classList.add('is-open'));
+  internal.forEach(a=>a.addEventListener('click',e=>{
+   if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+   const url=new URL(a.href,location.href);
+   if(url.pathname===location.pathname&&url.search===location.search)return;
+   e.preventDefault();
+   curtain.classList.remove('is-open');
+   curtain.classList.add('is-closing');
+   window.setTimeout(()=>location.assign(url.href),420);
+  }));
+ }
+ const revealTargets=document.querySelectorAll('.studio-image,.work-photo,.contact-card,.services article,.work-cta');
+ if('IntersectionObserver'in window){
+  const reveal=new IntersectionObserver(entries=>entries.forEach(entry=>{
+   if(entry.isIntersecting){entry.target.classList.add('is-in-view');reveal.unobserve(entry.target);}
+  }),{threshold:.12,rootMargin:'0px 0px -5% 0px'});
+  revealTargets.forEach(el=>{el.classList.add('hl-reveal');reveal.observe(el);});
+ }
+ if(!reduce&&matchMedia('(hover:hover) and (pointer:fine)').matches){
+  document.querySelectorAll('.header-cta,.hl-pill,.hl-cta>a,.work-cta>a').forEach(el=>{
+   el.addEventListener('pointermove',e=>{
+    const r=el.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;
+    el.style.transform='translate('+x*.07+'px,'+y*.12+'px)';
+   });
+   el.addEventListener('pointerleave',()=>{el.style.transform='';});
+  });
+ }
+});
