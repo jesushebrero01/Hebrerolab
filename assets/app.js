@@ -127,3 +127,25 @@ document.addEventListener('DOMContentLoaded',()=>{
   card.addEventListener('pointerleave',()=>{card.style.transform='';photo.style.backgroundPosition='';});
  });
 });
+
+
+/* EDITORIAL PASS 01 — accessible navigation and motion archive entrance */
+document.addEventListener('DOMContentLoaded',()=>{
+ const toggle=document.querySelector('.menu-toggle');
+ const nav=document.querySelector('.main-nav');
+ if(toggle&&nav){
+  toggle.setAttribute('aria-expanded',nav.classList.contains('open')?'true':'false');
+  toggle.setAttribute('aria-controls','primary-navigation');
+  nav.id='primary-navigation';
+  toggle.addEventListener('click',()=>toggle.setAttribute('aria-expanded',nav.classList.contains('open')?'true':'false'));
+  nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');toggle.setAttribute('aria-expanded','false');}));
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&nav.classList.contains('open')){nav.classList.remove('open');toggle.setAttribute('aria-expanded','false');toggle.focus();}});
+ }
+ const frames=[...document.querySelectorAll('.hl-film-frame')];
+ if(frames.length&&'IntersectionObserver'in window){
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
+   if(entry.isIntersecting){entry.target.classList.add('is-in-view');observer.unobserve(entry.target);}
+  }),{threshold:.12,rootMargin:'0px 0px -5% 0px'});
+  frames.forEach(frame=>observer.observe(frame));
+ }else frames.forEach(frame=>frame.classList.add('is-in-view'));
+});
