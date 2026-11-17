@@ -341,3 +341,21 @@ body{background:var(--paper);color:var(--ink)}
 .hl-work-image:after{z-index:1}
 .hl-work-image .hl-card-video{z-index:0}
 .hl-work-image>span,.hl-work-image>b{z-index:2}
+
+/* HEBREROLAB immersive motion system */
+.hl-hero{isolation:isolate}.hl-hero-image{z-index:0}.hl-hero-shade{z-index:1;pointer-events:none}
+.hl-hero-world{position:absolute;z-index:2;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.2s ease;mix-blend-mode:screen}
+.hl-hero-world.is-ready{opacity:1}.hl-hero-content,.hl-hero-top,.hl-hero-bottom{z-index:4}
+.hl-kicker i{box-shadow:0 0 14px #d7ef9b;animation:hlPulse 2.4s ease-in-out infinite}
+@keyframes hlPulse{0%,100%{opacity:.55;transform:scaleX(.8)}50%{opacity:1;transform:scaleX(1.35)}}
+.hl-pill{position:relative;overflow:hidden;isolation:isolate;transition:color .35s ease,transform .35s cubic-bezier(.2,.8,.2,1)}
+.hl-pill:before{content:"";position:absolute;inset:0;background:#d7ef9b;transform:translateY(105%);transition:transform .4s cubic-bezier(.2,.8,.2,1);z-index:-1}
+.hl-pill:hover{color:#151712;transform:translateY(-3px)}.hl-pill:hover:before{transform:translateY(0)}
+.hl-work-card{transform-style:preserve-3d;perspective:1000px;will-change:transform;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.hl-work-image{overflow:hidden;isolation:isolate}.hl-work-image video,.hl-work-image img{transition:transform 1.1s cubic-bezier(.2,.7,.2,1),filter .8s ease}
+.hl-work-card:hover .hl-work-image video,.hl-work-card:hover .hl-work-image img{transform:scale(1.055);filter:saturate(1.08)}
+.hl-work-card .hl-work-caption{transition:transform .45s ease}.hl-work-card:hover .hl-work-caption{transform:translateY(-3px)}
+.hl-section-label:after{content:"";height:1px;background:currentColor;opacity:.16;position:absolute;left:0;right:0;bottom:-12px;transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.hl-section-label.is-visible:after{transform:scaleX(1)}
+@media(max-width:800px){.hl-hero-world{opacity:.7;mix-blend-mode:screen}.hl-work-card{transform:none!important}}
+@media(prefers-reduced-motion:reduce){.hl-hero-world{display:none}.hl-kicker i{animation:none}.hl-pill:before{display:none}.hl-work-card,.hl-work-image video,.hl-work-image img{transition:none}}
