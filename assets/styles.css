@@ -531,3 +531,33 @@ body{background:var(--paper);color:var(--ink)}
 }
 @media(max-width:420px){.studio-hero{min-height:640px}.studio-hero-copy h1{font-size:64px}.studio-hero-meta span:last-child{max-width:120px;text-align:right}.studio-hero-bottom span:nth-child(2){display:none}}
 @media(prefers-reduced-motion:reduce){.studio-hero-video{animation:none}.studio-hero-link b,.studio-process-step,.studio-process-step h3 em{transition:none}}
+
+
+/* WORK PASS 06 — image-led archive introduction */
+.work-hero{min-height:min(880px,100svh);height:850px;max-height:100svh;position:relative;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:6vw;padding:125px 10vw 85px;background:#171916;color:#f4f3ed;overflow:hidden}
+.work-hero-copy{position:relative;z-index:2;max-width:690px;padding-bottom:20px}
+.work-hero-copy h1{font-size:clamp(76px,9.2vw,132px);line-height:.86;letter-spacing:-.09em;font-weight:500;margin:42px 0 26px;text-wrap:balance}
+.work-hero-copy h1 em{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.055em;color:#d7ef9b}
+.work-hero-copy>p{max-width:440px;color:#c0c1b8;font-size:13px;line-height:1.9;margin:0}
+.work-hero-link{display:inline-flex;align-items:center;gap:28px;margin-top:34px;padding:12px 0;border-bottom:1px solid #ffffff75;font:8px 'DM Mono',monospace;letter-spacing:.12em}
+.work-hero-link b{font-size:14px;color:#d7ef9b;font-weight:400;transition:transform .25s}
+.work-hero-link:hover b{transform:translateY(4px)}
+.work-hero-visual{height:min(62vw,620px);min-height:420px;position:relative;overflow:hidden;background:#282a24;isolation:isolate}
+.work-hero-visual video,.work-hero-visual-shade{position:absolute;inset:0;width:100%;height:100%}
+.work-hero-visual video{object-fit:cover;filter:brightness(.82) saturate(.82) contrast(1.06);transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.work-hero-visual:hover video{transform:scale(1.045)}
+.work-hero-visual-shade{background:linear-gradient(0deg,rgba(0,0,0,.42),transparent 48%);pointer-events:none}
+.work-hero-visual-label,.work-hero-visual-index{position:absolute;z-index:2;color:#fff;font:8px 'DM Mono',monospace;letter-spacing:.12em}
+.work-hero-visual-label{left:20px;top:20px}
+.work-hero-visual-index{right:20px;bottom:20px;display:flex;gap:9px;align-items:center}
+.work-hero-visual-index span{color:#d7ef9b}
+.work-hero-bottom{position:absolute;left:5vw;right:5vw;bottom:27px;display:flex;justify-content:space-between;gap:16px;color:#ffffff8f;font:7px 'DM Mono',monospace;letter-spacing:.12em}
+@media(max-width:800px){
+ .work-hero{height:auto;min-height:0;max-height:none;grid-template-columns:1fr;gap:36px;padding:135px 7vw 90px}
+ .work-hero-copy h1{font-size:clamp(68px,13vw,100px);margin:35px 0 22px}
+ .work-hero-visual{height:72vw;min-height:300px;max-height:520px}
+ .work-hero-bottom{left:7vw;right:7vw;font-size:6px}
+ .work-hero-bottom span:nth-child(2){display:none}
+}
+@media(max-width:420px){.work-hero{padding-top:125px}.work-hero-copy h1{font-size:64px}.work-hero-copy>p{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.work-hero-visual video{transition:none}.work-hero-link b{transition:none}}

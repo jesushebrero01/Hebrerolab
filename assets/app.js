@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduced||!window.gsap||!window.ScrollTrigger)return;
   gsap.registerPlugin(ScrollTrigger);
-  gsap.utils.toArray('.hl-manifesto-grid,.hl-work-heading,.hl-work-card,.hl-statement-copy,.hl-capabilities-intro,.hl-capability-card,.hl-capabilities-foot,.hl-cta,.page-intro .eyebrow,.page-intro h1,.page-intro p,.studio-hero-copy,.studio-process-intro,.studio-process-step,.work-card,.studio-grid,.contact-layout').forEach((el,i)=>{
+  gsap.utils.toArray('.hl-manifesto-grid,.hl-work-heading,.hl-work-card,.hl-statement-copy,.hl-capabilities-intro,.hl-capability-card,.hl-capabilities-foot,.hl-cta,.page-intro .eyebrow,.page-intro h1,.page-intro p,.studio-hero-copy,.studio-process-intro,.studio-process-step,.work-hero-copy,.work-hero-visual,.work-card,.studio-grid,.contact-layout').forEach((el,i)=>{
     gsap.fromTo(el,{y:42,opacity:0},{y:0,opacity:1,duration:.95,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%',once:true}});
   });
   gsap.utils.toArray('.hl-section-label').forEach(el=>{
