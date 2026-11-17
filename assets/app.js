@@ -188,3 +188,54 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
  }
 });
+
+
+/* HEBREROLAB V2 — project archive, media lifecycle and page polish */
+document.addEventListener('DOMContentLoaded',()=>{
+ const root=document.body;
+ const progress=document.createElement('div');progress.className='v2-scroll-progress';progress.innerHTML='<span></span>';root.appendChild(progress);
+ const bar=progress.firstElementChild;
+ const paint=()=>{const max=document.documentElement.scrollHeight-innerHeight;bar.style.transform='scaleX('+(max>0?scrollY/max:0)+')';};
+ addEventListener('scroll',paint,{passive:true});addEventListener('resize',paint);paint();
+ const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('.hl-nav');
+ if(menu&&nav)menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));});
+ const current=location.pathname.split('/').pop()||'index.html';
+ document.querySelectorAll('.hl-nav a').forEach(a=>{if(a.getAttribute('href')===current)a.setAttribute('aria-current','page');});
+ document.querySelectorAll('.v2-filters .filter').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.v2-filters .filter').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.v2-archive-card').forEach(card=>{card.hidden=btn.dataset.filter!=='all'&&card.dataset.category!==btn.dataset.filter;});
+ }));
+ const cards=[...document.querySelectorAll('.v2-archive-open')];
+ if(cards.length){
+  const box=document.createElement('div');box.className='v2-lightbox';box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.setAttribute('aria-label','Visual study viewer');
+  box.innerHTML='<button type="button" aria-label="Cerrar">×</button><video controls playsinline></video><p>HEBREROLAB® / VISUAL STUDY</p>';document.body.appendChild(box);
+  const player=box.querySelector('video'),close=()=>{box.classList.remove('is-open');player.pause();player.removeAttribute('src');player.load();document.body.style.overflow='';};
+  box.querySelector('button').addEventListener('click',close);box.addEventListener('click',e=>{if(e.target===box)close();});
+  cards.forEach(card=>card.addEventListener('click',()=>{
+   const source=card.querySelector('video source')?.src;if(!source)return;
+   player.src=source;box.classList.add('is-open');document.body.style.overflow='hidden';player.play().catch(()=>{});
+  }));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&box.classList.contains('is-open'))close();});
+ }
+ const form=document.querySelector('#contact-form');
+ if(form)form.addEventListener('submit',e=>{
+  e.preventDefault();const d=new FormData(form);
+  const subject=encodeURIComponent('Project enquiry — HebreroLab / '+d.get('subject'));
+  const body=encodeURIComponent('Name: '+d.get('name')+'\nEmail: '+d.get('email')+'\nProject: '+d.get('subject')+'\n\n'+d.get('message'));
+  location.href='mailto:hola@hebrerolab.com?subject='+subject+'&body='+body;
+ });
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if('IntersectionObserver'in window){
+  const mediaObserver=new IntersectionObserver(entries=>entries.forEach(({target,isIntersecting})=>{
+   if(isIntersecting){if(target.preload==='none'&&target.readyState===0)target.load();if(!reduced)target.play().catch(()=>{});}
+   else target.pause();
+  }),{rootMargin:'180px 0px',threshold:.03});
+  document.querySelectorAll('.hl-v2 video').forEach(v=>{v.muted=true;v.playsInline=true;mediaObserver.observe(v);v.addEventListener('error',()=>v.classList.add('video-failed'),{once:true});});
+ }
+ if(!reduced&&matchMedia('(hover:hover) and (pointer:fine)').matches){
+  document.querySelectorAll('.v2-project,.v2-archive-card').forEach(card=>{
+   card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5;card.style.transform='translateY(-3px) rotateY('+(x*1.4)+'deg)';});
+   card.addEventListener('pointerleave',()=>card.style.transform='');
+  });
+ }
+});
