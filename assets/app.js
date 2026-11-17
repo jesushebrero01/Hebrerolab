@@ -81,3 +81,22 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(v.readyState>=2)v.play().catch(()=>{});
   });
 });
+
+/* Pointer interaction, editorial reveals and viewport-aware video playback */
+document.addEventListener('DOMContentLoaded',()=>{
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if(!reduced&&matchMedia('(pointer:fine)').matches){
+  document.querySelectorAll('.hl-work-card').forEach(card=>{
+   card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform='perspective(1100px) rotateY('+(x*3.2)+'deg) rotateX('+(-y*2.6)+'deg) translateY(-4px)';});
+   card.addEventListener('pointerleave',()=>card.style.transform='');
+  });
+ }
+ if(window.gsap&&window.ScrollTrigger&&!reduced){
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.utils.toArray('.hl-manifesto h2,.hl-work-heading h2,.hl-statement-copy h2,.hl-cta h2').forEach(el=>gsap.fromTo(el,{y:54,opacity:0,rotateX:5},{y:0,opacity:1,rotateX:0,duration:1.05,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%',once:true}}));
+  gsap.utils.toArray('.hl-services-line span').forEach((el,i)=>gsap.fromTo(el,{y:18,opacity:0},{y:0,opacity:1,duration:.65,delay:i*.07,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 92%',once:true}}));
+  gsap.utils.toArray('.hl-section-label').forEach(el=>ScrollTrigger.create({trigger:el,start:'top 88%',once:true,onEnter:()=>el.classList.add('is-visible')}));
+ }
+ const videos=[...document.querySelectorAll('video:not(.hl-bg-video)')];
+ if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(({target,isIntersecting})=>{if(isIntersecting)target.play?.().catch(()=>{});else target.pause?.();}),{rootMargin:'180px 0px',threshold:.08});videos.forEach(v=>observer.observe(v));}
+});
