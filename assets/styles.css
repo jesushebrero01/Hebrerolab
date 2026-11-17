@@ -327,3 +327,17 @@ body{background:var(--paper);color:var(--ink)}
  .hl-hero-image .hl-bg-video,.hl-expand-video,.hl-card-video,.hl-statement-video{display:none}
  .hl-hero-image{background:#171714}
 }
+
+
+/* VISUAL QUALITY PASS — preserve source footage detail */
+.hl-hero-image .hl-bg-video{filter:brightness(.88) contrast(1.04) saturate(.9);transform:none}
+.hl-hero-shade{background:linear-gradient(90deg,rgba(8,8,8,.68) 0%,rgba(8,8,8,.28) 40%,rgba(8,8,8,.02) 78%),linear-gradient(0deg,rgba(8,8,8,.48),transparent 40%,rgba(8,8,8,.16))}
+.hl-expand .hl-expand-video{filter:brightness(.94) contrast(1.04) saturate(.92)}
+.hl-work-image .hl-card-video{filter:brightness(.96) contrast(1.04) saturate(.94)}
+.hl-work-card:hover .hl-card-video{filter:brightness(1) contrast(1.04) saturate(1)}
+.hl-statement-image .hl-statement-video{filter:brightness(.9) contrast(1.04) saturate(.88)}
+.hl-hero-image{background:#10100f}
+.hl-work-image{isolation:isolate}
+.hl-work-image:after{z-index:1}
+.hl-work-image .hl-card-video{z-index:0}
+.hl-work-image>span,.hl-work-image>b{z-index:2}
