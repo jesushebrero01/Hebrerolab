@@ -19,7 +19,6 @@ if(root){
   root.prepend(renderer.domElement);
 
   scene.add(new THREE.HemisphereLight(0xd8e4dc,0x1a1715,1.45));
-  const key=new THREE.AreaLight;
   const soft=new THREE.DirectionalLight(0xffe2c0,4.8);soft.position.set(4,8,7);soft.castShadow=true;soft.shadow.mapSize.set(2048,2048);soft.shadow.camera.left=-7;soft.shadow.camera.right=7;soft.shadow.camera.top=7;soft.shadow.camera.bottom=-7;scene.add(soft);
   const rim=new THREE.DirectionalLight(0xa4c7db,4.2);rim.position.set(-6,5,-4);scene.add(rim);
   const strip=new THREE.PointLight(0xf4c98a,28,12);strip.position.set(3,2,4);scene.add(strip);
