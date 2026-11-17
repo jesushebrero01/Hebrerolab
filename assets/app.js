@@ -61,3 +61,23 @@ document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('[da
   window.addEventListener('resize',measure);
   measure();
 })();
+
+
+/* GSAP motion direction — restrained, editorial, scroll-led */
+document.addEventListener('DOMContentLoaded',()=>{
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced||!window.gsap||!window.ScrollTrigger)return;
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.utils.toArray('.hl-manifesto-grid,.hl-work-heading,.hl-work-card,.hl-statement-copy,.hl-cta').forEach((el,i)=>{
+    gsap.fromTo(el,{y:42,opacity:0},{y:0,opacity:1,duration:.95,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%',once:true}});
+  });
+  gsap.utils.toArray('.hl-section-label').forEach(el=>{
+    gsap.fromTo(el,{opacity:0,x:-18},{opacity:1,x:0,duration:.7,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 90%',once:true}});
+  });
+  const heroVideo=document.querySelector('.hl-bg-video');
+  if(heroVideo){heroVideo.addEventListener('loadedmetadata',()=>{heroVideo.play().catch(()=>{});},{once:true});}
+  document.querySelectorAll('video').forEach(v=>{
+    v.addEventListener('error',()=>{v.classList.add('video-failed');},{once:true});
+    if(v.readyState>=2)v.play().catch(()=>{});
+  });
+});
