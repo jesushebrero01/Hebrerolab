@@ -27,13 +27,13 @@ if(canvas&&hero&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
   const count=360,positions=new Float32Array(count*3);
   for(let i=0;i<count;i++){const radius=2.3+Math.random()*1.5,a=Math.random()*Math.PI*2,b=(Math.random()-.5)*Math.PI;positions[i*3]=Math.cos(a)*Math.cos(b)*radius;positions[i*3+1]=Math.sin(b)*radius;positions[i*3+2]=Math.sin(a)*Math.cos(b)*radius;}
   const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(positions,3));world.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0xdbe8cf,size:.018,transparent:true,opacity:.6,sizeAttenuation:true})));
-  const resize=()=>{const w=hero.clientWidth,h=hero.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();world.position.x=w<800?.7:2.15;world.scale.setScalar(w<800?.72:1);};new ResizeObserver(resize).observe(hero);resize();
+  const resize=()=>{const w=hero.clientWidth,h=hero.clientHeight;if(!w||!h)return;const ratio=Math.min(devicePixelRatio||1,w<800?1:1.35);renderer.setPixelRatio(ratio);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();world.position.x=w<800?.7:2.15;world.scale.setScalar(w<800?.72:1);};new ResizeObserver(resize).observe(hero);resize();
   hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();mouse.x=(e.clientX-r.left)/r.width-.5;mouse.y=(e.clientY-r.top)/r.height-.5;},{passive:true});
   addEventListener('scroll',()=>{scroll=Math.min(1,Math.max(0,scrollY/Math.max(1,hero.offsetHeight)));},{passive:true});
-  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible&&!raf)raf=requestAnimationFrame(draw);}).observe(hero);
-  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);raf=0;}else if(visible&&!raf)raf=requestAnimationFrame(draw);});
+  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;renderer.setAnimationLoop(visible&&!document.hidden?draw:null);}).observe(hero);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){renderer.setAnimationLoop(null);}else if(visible&&!raf)raf=requestAnimationFrame(draw);});
   const clock=new THREE.Clock();
-  function draw(){if(!visible||document.hidden){raf=0;return;}raf=requestAnimationFrame(draw);const t=clock.getElapsedTime();smooth.x+=(mouse.x-smooth.x)*.035;smooth.y+=(mouse.y-smooth.y)*.035;world.rotation.y=.18+Math.sin(t*.16)*.16+smooth.x*.22;world.rotation.x=.12+smooth.y*.16;world.rotation.z=Math.sin(t*.12)*.08;world.position.y=.05+Math.sin(t*.42)*.08-scroll*.34;world.scale.setScalar(1-scroll*.1);ribbon.rotation.y+=.0011;core.rotation.y-=.0014;ringA.rotation.z+=.0011;ringB.rotation.x-=.0008;orb.position.y=.78+Math.sin(t*.7)*.12;renderer.render(scene,camera);}
+  function draw(){if(!visible||document.hidden)return;const t=clock.getElapsedTime();smooth.x+=(mouse.x-smooth.x)*.035;smooth.y+=(mouse.y-smooth.y)*.035;world.rotation.y=.18+Math.sin(t*.16)*.16+smooth.x*.22;world.rotation.x=.12+smooth.y*.16;world.rotation.z=Math.sin(t*.12)*.08;world.position.y=.05+Math.sin(t*.42)*.08-scroll*.34;world.scale.setScalar(1-scroll*.1);ribbon.rotation.y+=.0011;core.rotation.y-=.0014;ringA.rotation.z+=.0011;ringB.rotation.x-=.0008;orb.position.y=.78+Math.sin(t*.7)*.12;renderer.render(scene,camera);}
   canvas.classList.add('is-ready');draw();
  }catch(e){console.warn('HebreroLab 3D unavailable',e);canvas.remove();if(renderer)renderer.dispose();}
 }
