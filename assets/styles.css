@@ -476,3 +476,58 @@ body{background:var(--paper);color:var(--ink)}
 @media(max-width:420px){.hl-capabilities-grid{grid-template-columns:1fr}.hl-capability-card{min-height:220px}}
 @media(hover:none){.hl-capability-card:active:before{inset:0}.hl-capability-card:active p{color:#c1c2b8}}
 @media(prefers-reduced-motion:reduce){.hl-capability-card,.hl-capability-card:before,.hl-capability-card>b{transition:none}}
+
+
+/* STUDIO PASS 05 — cinematic introduction and clear creative process */
+.studio-hero{min-height:min(900px,100svh);height:880px;max-height:100svh;position:relative;overflow:hidden;background:#141512;color:#f4f3ed;isolation:isolate}
+.studio-hero-video,.studio-hero-shade{position:absolute;inset:0;width:100%;height:100%}
+.studio-hero-video{object-fit:cover;object-position:center 48%;z-index:-2;filter:brightness(.68) saturate(.78) contrast(1.08);animation:studioFilmIn 1.6s cubic-bezier(.2,.7,.2,1) both}
+.studio-hero-shade{z-index:-1;background:linear-gradient(90deg,rgba(9,10,8,.82),rgba(9,10,8,.36) 55%,rgba(9,10,8,.08)),linear-gradient(0deg,rgba(9,10,8,.55),transparent 35%,rgba(9,10,8,.2))}
+@keyframes studioFilmIn{from{transform:scale(1.07);opacity:.5}to{transform:scale(1);opacity:1}}
+.studio-hero-meta,.studio-hero-bottom{position:absolute;left:5vw;right:5vw;display:flex;justify-content:space-between;gap:18px;color:#ffffffa8;font:8px 'DM Mono',monospace;letter-spacing:.13em}
+.studio-hero-meta{top:120px}
+.studio-hero-bottom{bottom:28px}
+.studio-hero-copy{position:absolute;left:10vw;top:50%;transform:translateY(-42%);max-width:780px}
+.studio-hero-copy h1{font-size:clamp(76px,10vw,142px);line-height:.86;letter-spacing:-.09em;font-weight:500;margin:35px 0 25px;text-wrap:balance}
+.studio-hero-copy h1 em{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.055em;color:#d7ef9b}
+.studio-hero-copy>p{max-width:450px;color:#d3d1c8;font-size:13px;line-height:1.9;margin:0}
+.studio-hero-link{display:inline-flex;align-items:center;gap:26px;margin-top:32px;padding:12px 0;border-bottom:1px solid #ffffff75;font:8px 'DM Mono',monospace;letter-spacing:.12em}
+.studio-hero-link b{font-size:14px;color:#d7ef9b;font-weight:400;transition:transform .25s}
+.studio-hero-link:hover b{transform:translateY(4px)}
+.studio-statement{padding-top:120px;padding-bottom:120px}
+.studio-image{position:relative;overflow:hidden}
+.studio-image:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#1113,transparent 55%);pointer-events:none}
+.studio-statement>div:last-child{max-width:520px}
+.studio-process{background:#e7e6de;color:#171815;padding-top:110px;padding-bottom:115px}
+.studio-process-top{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid #b9baaf;padding-bottom:15px;color:#77796e;font:8px 'DM Mono',monospace;letter-spacing:.12em}
+.studio-process-intro{display:grid;grid-template-columns:1.2fr .8fr;gap:8vw;align-items:end;padding:70px 0 60px}
+.studio-process-intro h2{font-size:clamp(52px,7vw,96px);line-height:.94;letter-spacing:-.085em;font-weight:500;margin:0}
+.studio-process-intro h2 em{font-family:'Instrument Serif',serif;font-weight:400;color:#78876a}
+.studio-process-intro>p{max-width:390px;margin:0 0 6px;color:#696b60;font-size:13px;line-height:1.9}
+.studio-process-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #b9baaf;border-left:1px solid #b9baaf}
+.studio-process-step{min-height:285px;padding:22px 24px 25px;border-right:1px solid #b9baaf;border-bottom:1px solid #b9baaf;display:flex;flex-direction:column;justify-content:space-between;transition:background .4s,color .4s}
+.studio-process-step>span{font:8px 'DM Mono',monospace;letter-spacing:.12em;color:#77796e}
+.studio-process-step h3{font-size:clamp(30px,3.5vw,48px);line-height:.98;letter-spacing:-.07em;font-weight:500;margin:35px 0 15px}
+.studio-process-step h3 em{font-family:'Instrument Serif',serif;font-weight:400;color:#78876a;transition:color .4s}
+.studio-process-step p{max-width:310px;color:#6c6e64;font-size:11px;line-height:1.85;margin:0}
+.studio-process-step:hover{background:#191b17;color:#f3f1e9}
+.studio-process-step:hover>span,.studio-process-step:hover p{color:#bfc1b6}
+.studio-process-step:hover h3 em{color:#c7d9a9}
+@media(max-width:800px){
+ .studio-hero{height:86svh;min-height:680px}
+ .studio-hero-meta,.studio-hero-bottom{left:6vw;right:6vw;font-size:6px}
+ .studio-hero-meta{top:108px}
+ .studio-hero-copy{left:7vw;right:7vw;top:48%}
+ .studio-hero-copy h1{font-size:clamp(66px,12vw,96px)}
+ .studio-hero-copy>p{font-size:12px;max-width:390px}
+ .studio-statement{grid-template-columns:1fr;gap:38px;padding-top:75px;padding-bottom:80px}
+ .studio-image{height:62vw;min-height:300px;max-height:500px}
+ .studio-process{padding-top:75px;padding-bottom:80px}
+ .studio-process-intro{grid-template-columns:1fr;gap:22px;padding:48px 0 38px}
+ .studio-process-intro h2{font-size:clamp(52px,12vw,78px)}
+ .studio-process-grid{grid-template-columns:1fr}
+ .studio-process-step{min-height:225px;padding:19px}
+ .studio-process-step h3{font-size:39px;margin:30px 0 18px}
+}
+@media(max-width:420px){.studio-hero{min-height:640px}.studio-hero-copy h1{font-size:64px}.studio-hero-meta span:last-child{max-width:120px;text-align:right}.studio-hero-bottom span:nth-child(2){display:none}}
+@media(prefers-reduced-motion:reduce){.studio-hero-video{animation:none}.studio-hero-link b,.studio-process-step,.studio-process-step h3 em{transition:none}}
