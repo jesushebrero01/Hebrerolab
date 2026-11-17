@@ -432,3 +432,29 @@ body{background:var(--paper);color:var(--ink)}
 @keyframes hlTextFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}
 @media(max-width:800px){.hl-film-strip{padding:70px 7vw 52px}.hl-film-grid{grid-template-columns:1fr 1fr;gap:10px}.hl-film-frame,.hl-film-frame:nth-child(2),.hl-film-frame:nth-child(3){height:260px;margin:0}.hl-film-wide{grid-column:1/-1;height:340px!important}.hl-film-top,.hl-film-bottom{font-size:6px}}
 @media(prefers-reduced-motion:reduce){.hl-hero h1 em{animation:none}.hl-film-frame video,.work-photo-video{transition:none}}
+
+
+/* HEBREROLAB — cinematic page transitions and refined interaction states */
+.hl-page-curtain{position:fixed;z-index:9999;inset:0;background:#11110f;color:#f0efe9;display:grid;place-items:center;clip-path:inset(0 0 0 0);transition:clip-path .72s cubic-bezier(.77,0,.18,1);pointer-events:none}
+.hl-page-curtain>span{font:10px 'DM Mono',monospace;letter-spacing:.24em;opacity:.9}
+.hl-page-curtain>span span{color:#d7ef9b}
+.hl-page-curtain.is-open{clip-path:inset(0 0 100% 0)}
+.hl-page-curtain.is-closing{clip-path:inset(0 0 0 0)}
+.main-nav a.is-current{opacity:1}
+.main-nav a.is-current:after{transform:scaleX(1);transform-origin:left}
+.main-nav a{position:relative}
+.main-nav a:after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.main-nav a:hover:after{transform:scaleX(1);transform-origin:left}
+.hl-reveal{opacity:0;transform:translate3d(0,34px,0);transition:opacity .85s cubic-bezier(.2,.7,.2,1),transform .95s cubic-bezier(.2,.7,.2,1)}
+.hl-reveal.is-in-view{opacity:1;transform:translate3d(0,0,0)}
+.studio-image.hl-reveal{clip-path:inset(7% 7% 7% 7%);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.2,1),clip-path 1.1s cubic-bezier(.2,.7,.2,1)}
+.studio-image.hl-reveal.is-in-view{clip-path:inset(0)}
+.work-photo.hl-reveal{transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1),clip-path 1s cubic-bezier(.2,.7,.2,1)}
+.work-photo.hl-reveal:not(.is-in-view){clip-path:inset(5% 5% 5% 5%)}
+.work-photo.hl-reveal.is-in-view{clip-path:inset(0)}
+.header-cta,.hl-pill,.hl-cta>a,.work-cta>a{will-change:transform}
+@media(prefers-reduced-motion:reduce){
+ .hl-page-curtain{display:none}
+ .hl-reveal,.studio-image.hl-reveal,.work-photo.hl-reveal{opacity:1;transform:none;clip-path:none;transition:none}
+ .main-nav a:after{transition:none}
+}
