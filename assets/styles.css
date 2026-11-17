@@ -48,3 +48,63 @@
  .hero-3d .hero-bottom span:first-child{max-width:135px}
 }
 @media(prefers-reduced-motion:reduce){.hero-copy-3d{animation:none}.scene-loading i{animation:none}}
+\n
+/* HEBREROLAB VISUAL REFINEMENT — warm studio / premium product direction */
+:root{--ink:#24211d;--paper:#eee9e0;--sand:#d9cdbb;--wine:#70433e;--metal:#b18a59}
+body{background:var(--paper);color:var(--ink)}
+.hero-3d{background:#e8e2d8;color:#24211d}
+.site-header{color:#24211d;border-bottom-color:#24211d24}
+.brand-symbol span,.footer-brand span{color:#a77d53}
+.main-nav a{color:#514c44}
+.main-nav a:hover{color:#a16d4c}
+.header-cta{border-color:#5c51465e;color:#24211d}
+.header-cta span{color:#9a6b46}
+.hero-3d:after{background:linear-gradient(90deg,#e8e2d8 0%,#e8e2d8f5 20%,#e8e2d8a8 39%,transparent 65%),linear-gradient(0deg,#e8e2d8 0%,transparent 22%,#e8e2d855 100%)}
+.hero-3d .hero-meta{color:#6e665c}
+.hero-copy-3d .eyebrow{color:#8b6248}
+.hero-copy-3d .eyebrow i{background:#8b6248}
+.hero-copy-3d h1{color:#28231e;text-shadow:0 2px 24px #e8e2d866}
+.hero-copy-3d h1 em{color:#916c4e}
+.hero-copy-3d .hero-lead{color:#625c53}
+.hero-copy-3d .text-cta{color:#39342e;border-color:#8b8174}
+.hero-copy-3d .text-cta b{color:#956c49}
+.hero-3d .hero-bottom{color:#6e665c}
+.hero-3d .hero-bottom a{border-color:#9d8e7b;color:#906747}
+.hero-3d .hero-grain{opacity:.055;mix-blend-mode:multiply}
+.scene-loading{color:#63584c}
+.scene-loading i{background:#a77d53}
+.scene-hint{color:#63584c}
+.scene-hint span{color:#946c4c}
+.scene-index{color:#74695e}
+.hero-vertical-note{color:#8c8072}
+.ticker{background:#725048;color:#f4ede3}
+.ticker b{color:#d6b995}
+.intro-grid h2 em,.featured-head h2 em{color:#8c604b}
+.underlined-link b{color:#936d4f}
+.capability-row{border-color:#c9bfb1;color:#70665b}
+.featured{background:#e3ddd3}
+.feature-image{filter:saturate(.88)}
+.feature-card:hover .feature-image{transform:scale(1.012)}
+.feature-card:hover .image-arrow{background:#80594c;color:#fff}
+.process{background:#282521}
+.process-layout h2 em{color:#d3b99a}
+.process-steps article>span,.services article>span{color:#d0ae87}
+.process-steps article>b,.services article>b{color:#d3b99a}
+.closing-shade{background:linear-gradient(90deg,#201d1bd9,#201d1b66)}
+.closing-copy>span,.work-cta>span{color:#d3b99a}
+.closing-copy h2 em,.work-cta h2 em{color:#e1c8aa}
+.site-footer{background:#201e1b}
+.page-intro,.contact-layout,.work-cta,.services{background:#282521}
+.filter.active,.filter:hover{border-color:#936d4f}
+.contact-form button{background:#d9c3a5;color:#28231e}
+.contact-form input:focus,.contact-form textarea:focus{border-color:#d9c3a5}
+@media(max-width:800px){
+ .site-header{color:#24211d}
+ .main-nav.open{background:#eee9e0}
+ .main-nav a{color:#3f3933}
+ .menu-toggle i{background:#29241f}
+ .hero-3d:after{background:linear-gradient(90deg,#e8e2d8ed 0%,#e8e2d8a8 44%,transparent 100%),linear-gradient(0deg,#e8e2d8 0%,transparent 36%,#e8e2d855 100%)}
+ .product-scene{inset:20% -12% 0 0}
+ .hero-copy-3d{top:19%}
+}
+@media(prefers-reduced-motion:reduce){.feature-card:hover .feature-image{transform:none}}
