@@ -1,0 +1,25 @@
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/controls/OrbitControls.js';
+const mount=document.querySelector('#three-stage'),loading=document.querySelector('#scene-loading');
+if(mount){
+const scene=new THREE.Scene();scene.background=new THREE.Color('#171a17');scene.fog=new THREE.Fog('#171a17',13,31);
+const camera=new THREE.PerspectiveCamera(34,1,.1,100);camera.position.set(9,6.3,11);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;mount.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xdce9d5,0x252821,2));const key=new THREE.DirectionalLight(0xffe6c6,4.2);key.position.set(5,10,7);key.castShadow=true;key.shadow.mapSize.set(2048,2048);scene.add(key);const rim=new THREE.DirectionalLight(0x9fcb9a,2.3);rim.position.set(-7,5,-5);scene.add(rim);const fill=new THREE.PointLight(0xd9c5a5,35,18);fill.position.set(1,3,4);scene.add(fill);
+const mat=(color,roughness=.65,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});const stone=mat('#b7b4a8',.82),concrete=mat('#77786e',.8),dark=mat('#252b27',.36,.35),glass=new THREE.MeshPhysicalMaterial({color:'#9ab0a1',roughness:.12,metalness:.1,transmission:.55,transparent:true,opacity:.56,thickness:.4}),warm=mat('#c5a77c',.48,.15),groundMat=mat('#343a32',.95);
+const building=new THREE.Group();scene.add(building);
+function box(parent,w,h,d,material,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
+box(building,11,.22,8,groundMat,0,-.24,0);box(building,8.2,.3,5.8,concrete,0,.02,0);box(building,7.65,.12,5.25,stone,0,.23,0);
+box(building,7.2,.18,.18,dark,0,3.75,-2.48);box(building,7.2,.18,.18,dark,0,3.75,2.48);box(building,.18,.18,5,dark,-3.55,3.75,0);box(building,.18,.18,5,dark,3.55,3.75,0);
+for(let x=-3.25;x<=3.3;x+=1.08){box(building,.075,3.15,.075,dark,x,1.82,-2.42);box(building,.075,3.15,.075,dark,x,1.82,2.42);}
+const back=new THREE.Mesh(new THREE.BoxGeometry(6.95,3.05,.035),glass);back.position.set(0,1.82,-2.38);building.add(back);for(const x of [-3.48,3.48]){const side=new THREE.Mesh(new THREE.BoxGeometry(.035,3.05,4.7),glass);side.position.set(x,1.82,0);building.add(side);}
+box(building,8.1,.28,6.2,stone,0,3.95,0);box(building,7.7,.09,5.8,warm,0,4.13,0);box(building,2.1,2.65,.18,concrete,-2.25,1.68,-1.1);box(building,1.55,.42,1.1,warm,1.55,.78,-.45);box(building,.16,1.55,.16,dark,1.55,1.6,-.45);box(building,1.5,.12,.65,stone,1.55,2.42,-.45);
+for(let i=0;i<5;i++)box(building,3.2,.12,.45,i%2?stone:warm,0,-.12-i*.035,3.05+i*.42);
+for(const x of [-3.25,3.25])for(const z of [-2.2,2.2]){const c=new THREE.Mesh(new THREE.CylinderGeometry(.065,.085,3.45,16),dark);c.position.set(x,1.88,z);c.castShadow=true;building.add(c);}
+const site=new THREE.Mesh(new THREE.PlaneGeometry(200,200),groundMat);site.rotation.x=-Math.PI/2;site.position.y=-.38;site.receiveShadow=true;scene.add(site);const grid=new THREE.GridHelper(60,60,'#596253','#343b34');grid.position.y=-.365;grid.material.transparent=true;grid.material.opacity=.22;scene.add(grid);
+for(const [x,z] of [[-5,-2.8],[5,-2.8],[-5,2.7],[5,2.7]]){box(scene,.95,.42,.95,concrete,x,-.02,z);const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.045,.07,1.25,8),warm);trunk.position.set(x,.8,z);scene.add(trunk);const crown=new THREE.Mesh(new THREE.IcosahedronGeometry(.58,1),mat('#596b55',.9));crown.position.set(x,1.65,z);crown.scale.set(.8,1.3,.8);crown.castShadow=true;scene.add(crown);}
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.055;controls.enablePan=false;controls.minDistance=7;controls.maxDistance=19;controls.maxPolarAngle=Math.PI*.49;controls.target.set(0,1.5,0);controls.autoRotate=true;controls.autoRotateSpeed=.48;
+const initial={position:camera.position.clone(),target:controls.target.clone()};function resize(){const w=mount.clientWidth,h=mount.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}new ResizeObserver(resize).observe(mount);resize();
+document.querySelector('#reset-view')?.addEventListener('click',()=>{camera.position.copy(initial.position);controls.target.copy(initial.target);controls.update();});document.querySelector('#toggle-motion')?.addEventListener('click',e=>{controls.autoRotate=!controls.autoRotate;e.currentTarget.textContent=controls.autoRotate?'Ⅱ':'▶';});
+const clock=new THREE.Clock();function animate(){requestAnimationFrame(animate);building.position.y=Math.sin(clock.getElapsedTime()*.55)*.035;controls.update();renderer.render(scene,camera);}animate();setTimeout(()=>loading?.classList.add('is-hidden'),650);
+}
