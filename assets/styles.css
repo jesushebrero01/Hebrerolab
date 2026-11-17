@@ -410,3 +410,14 @@ body{background:var(--paper);color:var(--ink)}
 @media(prefers-reduced-motion:reduce){
  .hl-work-image .hl-card-image,.work-card,.work-photo,.hl-hero-bottom a{transition:none}
 }
+
+
+/* EDITORIAL PASS 01 — motion archive reveal and accessible controls */
+.hl-film-frame{transform:translate3d(0,24px,0);opacity:.001;transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.hl-film-frame.is-in-view{transform:translate3d(0,0,0);opacity:1}
+.hl-film-frame:nth-child(2){transition-delay:.1s}.hl-film-frame:nth-child(3){transition-delay:.2s}
+.hl-film-frame video{transition:transform 1.2s cubic-bezier(.2,.7,.2,1),filter .8s ease}
+.hl-film-frame:hover video{transform:scale(1.035);filter:saturate(1.08)}
+.hl-film-frame figcaption{transition:transform .45s ease,opacity .45s ease}
+.hl-film-frame:hover figcaption{transform:translateY(-4px)}
+@media(prefers-reduced-motion:reduce){.hl-film-frame,.hl-film-frame video,.hl-film-frame figcaption{transition:none;transform:none;opacity:1}}
