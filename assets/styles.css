@@ -151,3 +151,57 @@ body{background:var(--paper);color:var(--ink)}
  .hero-photo .hero-bottom span:first-child{max-width:135px}
 }
 @media(prefers-reduced-motion:reduce){.hero-photo .hero-copy,.hero-photo-image{animation:none;transform:none}}
+
+
+/* SCROLL EXPAND — native implementation */
+.scroll-expand-section{position:relative;background:#171613;color:#f4f0e8;overflow:clip}
+.scroll-expand-track{position:relative;width:100%}
+.scroll-expand-stage{position:sticky;top:0;width:100%;height:100svh;overflow:hidden;--se-title-size:5rem;background:#171613}
+.scroll-expand-frame{position:absolute;inset:0;clip-path:inset(21% 29% 21% 29% round 24px);will-change:clip-path;overflow:hidden}
+.scroll-expand-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:55% 50%;transform:scale(1.35);will-change:transform}
+.scroll-expand-scrim{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.76),rgba(0,0,0,.08) 48%,rgba(0,0,0,.32));opacity:0;pointer-events:none}
+.scroll-expand-title{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 7%;font-size:var(--se-title-size);font-weight:500;line-height:.94;letter-spacing:-.075em;color:#fff;text-shadow:0 2px 30px #0007;pointer-events:none;will-change:opacity,transform}
+.scroll-expand-title br+*{font-family:'Instrument Serif',serif}
+.scroll-expand-hint{position:absolute;z-index:3;left:0;right:0;bottom:28px;text-align:center;color:#ffffffa8;font:8px 'DM Mono',monospace;letter-spacing:.15em;will-change:opacity,transform}
+.scroll-expand-hint b{margin-left:12px;color:#d7b995;font-size:14px}
+.scroll-expand-overlay{position:absolute;z-index:3;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8%;opacity:0;will-change:opacity,transform}
+.scroll-expand-kicker{font:8px 'DM Mono',monospace;letter-spacing:.16em;color:#e1c6a5}
+.scroll-expand-overlay h2{font-size:clamp(54px,8vw,112px);line-height:.88;letter-spacing:-.085em;font-weight:500;margin:24px 0}
+.scroll-expand-overlay h2 em{font-family:'Instrument Serif',serif;font-weight:400;color:#e1c6a5}
+.scroll-expand-overlay p{font-size:12px;color:#eee5d9}
+.scroll-expand-overlay a{margin-top:22px;border-bottom:1px solid #ffffff88;padding-bottom:10px;font:8px 'DM Mono',monospace;letter-spacing:.12em}
+@media(max-width:800px){.scroll-expand-stage{height:100svh}.scroll-expand-frame{clip-path:inset(22% 8% round 18px)}.scroll-expand-title{font-size:clamp(36px,10vw,60px)}.scroll-expand-overlay h2{font-size:clamp(48px,12vw,72px)}.scroll-expand-overlay p{max-width:270px;line-height:1.7}.scroll-expand-hint{bottom:22px;font-size:7px}}
+@media(prefers-reduced-motion:reduce){.scroll-expand-title,.scroll-expand-media,.scroll-expand-overlay{will-change:auto}}
+
+/* SPIN VIEWER — native Three.js GLB viewer */
+.spin-section{background:#dcd5ca;color:#28231e}
+.spin-section-inner{padding-top:105px;padding-bottom:115px}
+.spin-heading{display:grid;grid-template-columns:1fr .55fr;gap:10vw;align-items:end;padding:65px 0 44px}
+.spin-heading .eyebrow{color:#8b6248}.spin-heading .eyebrow i{background:#8b6248}
+.spin-heading h2{font-size:clamp(54px,7vw,96px);line-height:.9;letter-spacing:-.085em;font-weight:500;margin:24px 0 0}
+.spin-heading h2 em{font-family:'Instrument Serif',serif;font-weight:400;color:#8b6248}
+.spin-heading>p{max-width:330px;margin:0 0 8px;color:#6b6257;font-size:12px;line-height:1.9}
+.spin-viewer{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(230px,.45fr);min-height:570px;background:#c9c0b3}
+.spin-canvas-wrap{position:relative;min-height:570px;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#eee8de 0%,#d3c9bb 56%,#b8ad9e 100%);touch-action:pan-y;cursor:grab}
+.spin-canvas-wrap:active{cursor:grabbing}
+.spin-canvas{display:block;width:100%;height:100%;min-height:570px;outline:0}
+.spin-loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;color:#64594c;font:8px 'DM Mono',monospace;letter-spacing:.14em;pointer-events:none;transition:opacity .4s}
+.spin-loader i{width:18px;height:1px;background:#8b6248;animation:spinLoad .8s infinite alternate}
+.spin-loader.loaded{opacity:0}
+@keyframes spinLoad{to{width:38px}}
+.spin-drag-cue{position:absolute;left:24px;bottom:22px;color:#75695b;font:7px 'DM Mono',monospace;letter-spacing:.12em;pointer-events:none}
+.spin-drag-cue span{font-size:16px;color:#8b6248;margin-left:8px}
+.spin-reset{position:absolute;right:22px;bottom:18px;border:1px solid #81756588;border-radius:30px;background:#eee8de88;padding:10px 14px;color:#544a3e;font:7px 'DM Mono',monospace;letter-spacing:.1em;cursor:pointer}
+.spin-hotspot{position:absolute;z-index:2;width:30px;height:30px;border:1px solid #fff;border-radius:50%;background:#795747;color:white;font:8px 'DM Mono',monospace;box-shadow:0 2px 14px #49362955;cursor:pointer;transform:translate(-50%,-50%);transition:transform .2s,background .2s}
+.spin-hotspot:hover,.spin-hotspot.active{transform:translate(-50%,-50%) scale(1.16);background:#28231e}
+.spin-notes{display:flex;flex-direction:column;padding:34px 28px;background:#282521;color:#f2ede4}
+.spin-notes-index{font:7px 'DM Mono',monospace;letter-spacing:.13em;color:#bca68d;border-bottom:1px solid #ffffff2c;padding-bottom:18px}
+.spin-note{padding:23px 0;border-bottom:1px solid #ffffff24;opacity:.42;transition:opacity .25s}
+.spin-note.active{opacity:1}
+.spin-note small{font:7px 'DM Mono',monospace;letter-spacing:.12em;color:#d4b995}
+.spin-note h3{font-size:21px;font-weight:500;letter-spacing:-.04em;margin:10px 0}
+.spin-note p{font-size:10px;line-height:1.8;color:#bcb5a9;margin:0}
+.spin-model-credit{margin-top:auto;padding-top:22px;color:#999185;font:6px/1.7 'DM Mono',monospace;letter-spacing:.06em}
+.spin-model-credit a{color:#d4b995;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:800px){.spin-section-inner{padding-top:75px;padding-bottom:75px}.spin-heading{grid-template-columns:1fr;gap:22px;padding:48px 0 28px}.spin-heading h2{font-size:64px}.spin-heading>p{font-size:11px}.spin-viewer{grid-template-columns:1fr}.spin-canvas-wrap,.spin-canvas{min-height:430px}.spin-notes{padding:24px 22px}.spin-note{padding:17px 0}.spin-model-credit{margin-top:10px}}
+@media(prefers-reduced-motion:reduce){.spin-loader i{animation:none}.spin-hotspot{transition:none}}
