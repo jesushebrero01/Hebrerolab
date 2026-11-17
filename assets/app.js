@@ -127,3 +127,16 @@ document.addEventListener('DOMContentLoaded',()=>{
   card.addEventListener('pointerleave',()=>{card.style.transform='';photo.style.backgroundPosition='';});
  });
 });
+
+/* Adaptive autoplay: decode footage only while near the viewport */
+document.addEventListener('DOMContentLoaded',()=>{
+ const clips=[...document.querySelectorAll('video')],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ clips.forEach(v=>{v.muted=true;v.playsInline=true;v.addEventListener('error',()=>v.classList.add('video-failed'),{once:true});});
+ if('IntersectionObserver'in window){
+  const io=new IntersectionObserver(entries=>entries.forEach(({target,isIntersecting})=>{
+   if(isIntersecting){if(target.readyState===0)target.load();if(!reduced)target.play().catch(()=>{});}
+   else target.pause();
+  }),{rootMargin:'240px 0px',threshold:.04});
+  clips.forEach(v=>io.observe(v));
+ }else if(!reduced){clips.forEach(v=>v.play().catch(()=>{}));}
+});
