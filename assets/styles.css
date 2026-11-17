@@ -376,3 +376,37 @@ body{background:var(--paper);color:var(--ink)}
 @media(hover:none),(pointer:coarse){.hl-cursor{display:none}}
 @media(max-width:800px){.hl-hero-world{mix-blend-mode:screen;opacity:.6}.hl-hero-content{z-index:5}.hl-hero-shade{z-index:3}}
 @media(prefers-reduced-motion:reduce){.hl-cursor,.hl-scroll-progress{display:none}.hl-cta>a{transition:none}}
+
+/* QUALITY PASS 02 — editorial depth, real media fallbacks, project archive */
+.hl-work-image .hl-card-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;transition:transform 1.1s cubic-bezier(.2,.7,.2,1),filter .8s ease;filter:saturate(.88) contrast(1.04)}
+.hl-work-card:hover .hl-card-image{transform:scale(1.055);filter:saturate(1.02) contrast(1.06)}
+.hl-work-image>span,.hl-work-image>b{position:relative}
+.video-failed{opacity:0!important}
+.hl-hero-world{contain:layout paint;backface-visibility:hidden}
+.hl-hero-image .hl-bg-video{object-position:center 52%}
+.hl-expand .scroll-expand-overlay{will-change:transform,opacity}
+.hl-marquee{overflow:hidden}
+.hl-marquee>div{will-change:transform}
+.work-gallery{perspective:1200px}
+.work-card{transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.75,.2,1),opacity .5s ease}
+.work-photo{transform:translateZ(0);isolation:isolate}
+.work-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 38%,rgba(0,0,0,.32));opacity:.72;transition:opacity .5s ease}
+.work-card:hover .work-photo:after{opacity:.35}
+.work-photo{background-position:center;background-size:cover;transition:background-size 1s ease,filter .7s ease}
+.work-card:hover .work-photo{filter:saturate(1.06)}
+.work-card[hidden]{display:none!important}
+.page-intro h1{text-wrap:balance}
+.page-intro p{max-width:560px}
+.site-header{backdrop-filter:blur(14px)}
+.main-nav a,.header-cta,.footer-brand{transition:opacity .25s ease,color .25s ease}
+.main-nav a:hover,.footer-brand:hover{opacity:.62}
+.hl-hero-bottom a{display:inline-flex;align-items:center;gap:8px}
+.hl-hero-bottom a:hover{transform:translateY(2px)}
+@media(max-width:800px){
+ .hl-work-image .hl-card-image{object-position:center}
+ .work-gallery{perspective:none}
+ .work-card{transform:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .hl-work-image .hl-card-image,.work-card,.work-photo,.hl-hero-bottom a{transition:none}
+}
