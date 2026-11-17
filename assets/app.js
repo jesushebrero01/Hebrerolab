@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduced||!window.gsap||!window.ScrollTrigger)return;
   gsap.registerPlugin(ScrollTrigger);
-  gsap.utils.toArray('.hl-manifesto-grid,.hl-work-heading,.hl-work-card,.hl-statement-copy,.hl-cta').forEach((el,i)=>{
+  gsap.utils.toArray('.hl-manifesto-grid,.hl-work-heading,.hl-work-card,.hl-statement-copy,.hl-cta,.page-intro .eyebrow,.page-intro h1,.page-intro p,.work-card,.studio-grid,.contact-layout').forEach((el,i)=>{
     gsap.fromTo(el,{y:42,opacity:0},{y:0,opacity:1,duration:.95,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%',once:true}});
   });
   gsap.utils.toArray('.hl-section-label').forEach(el=>{
@@ -111,4 +111,19 @@ document.addEventListener('DOMContentLoaded',()=>{
   }),{rootMargin:'220px 0px',threshold:.05});
   videos.forEach(v=>observer.observe(v));
  }
+});
+
+/* Editorial image and project interactions on inner pages */
+document.addEventListener('DOMContentLoaded',()=>{
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches||!matchMedia('(pointer:fine)').matches)return;
+ document.querySelectorAll('.work-card').forEach(card=>{
+  const photo=card.querySelector('.work-photo');
+  if(!photo)return;
+  card.addEventListener('pointermove',e=>{
+   const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+   card.style.transform='perspective(1200px) rotateY('+(x*2.2)+'deg) rotateX('+(-y*1.8)+'deg) translateY(-3px)';
+   photo.style.backgroundPosition=(50+x*3)+'% '+(50+y*3)+'%';
+  });
+  card.addEventListener('pointerleave',()=>{card.style.transform='';photo.style.backgroundPosition='';});
+ });
 });
