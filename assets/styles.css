@@ -301,3 +301,29 @@ body{background:var(--paper);color:var(--ink)}
  .home-redesign .site-footer{padding:30px 7vw 22px;gap:20px;flex-wrap:wrap}.home-redesign .site-footer>span{display:none}.home-redesign .site-footer small{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.hl-hero-image img,.hl-marquee div{animation:none}.hl-work-image img{transition:none}}
+
+
+/* HEBREROLAB — CINEMATIC VIDEO SYSTEM */
+.hl-hero-image{position:absolute;inset:0;overflow:hidden;background:#111}
+.hl-hero-image .hl-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 48%;filter:saturate(.78) contrast(1.08) brightness(.78);transform:scale(1.025)}
+.hl-hero-shade{background:linear-gradient(90deg,rgba(8,8,8,.82) 0%,rgba(8,8,8,.42) 42%,rgba(8,8,8,.06) 100%),linear-gradient(0deg,rgba(8,8,8,.62),transparent 42%,rgba(8,8,8,.28))}
+.hl-expand .scroll-expand-media{object-fit:cover}
+.hl-expand .hl-expand-video{filter:saturate(.72) contrast(1.08) brightness(.82)}
+.hl-work-image .hl-card-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.2,.7,.2,1),filter .6s;filter:saturate(.78) contrast(1.06)}
+.hl-work-card:hover .hl-card-video{transform:scale(1.055);filter:saturate(1) contrast(1.08)}
+.hl-statement-image{position:relative}
+.hl-statement-image .hl-statement-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.72) contrast(1.08)}
+.hl-hero-content,.hl-hero-top,.hl-hero-bottom{z-index:3}
+.hl-hero-content{animation:hlHeroText 1.1s cubic-bezier(.2,.7,.2,1) both}
+@keyframes hlHeroText{from{opacity:0;transform:translate3d(0,28px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+.hl-work-card{overflow:visible}
+.hl-work-image{background:#161615}
+.hl-work-image:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(0,0,0,.22),transparent 38%)}
+@media(max-width:800px){
+ .hl-hero-image .hl-bg-video{object-position:55% center}
+ .hl-work-image,.hl-work-card:nth-child(2) .hl-work-image{height:440px}
+}
+@media(prefers-reduced-motion:reduce){
+ .hl-hero-image .hl-bg-video,.hl-expand-video,.hl-card-video,.hl-statement-video{display:none}
+ .hl-hero-image{background:#171714}
+}
