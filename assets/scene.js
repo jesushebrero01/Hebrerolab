@@ -1,94 +1,188 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/controls/OrbitControls.js';
+import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/environments/RoomEnvironment.js';
 
-const root=document.querySelector('#product-scene');
-if(root){
-  const scene=new THREE.Scene();
-  scene.background=new THREE.Color('#080909');
-  scene.fog=new THREE.FogExp2('#080909',.027);
-  const camera=new THREE.PerspectiveCamera(34,1,.1,100);
-  camera.position.set(7.2,3.5,10.5);
-  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.7));
-  renderer.shadowMap.enabled=true;
-  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=1.18;
-  renderer.setClearColor(0x080909,0);
+const root = document.querySelector('#product-scene');
+if (root) {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#e8e2d8');
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+  camera.position.set(4.25, 2.1, 7.7);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.65));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.08;
+  renderer.setClearColor('#e8e2d8', 1);
   root.prepend(renderer.domElement);
 
-  scene.add(new THREE.HemisphereLight(0xd8e4dc,0x1a1715,1.45));
-  const soft=new THREE.DirectionalLight(0xffe2c0,4.8);soft.position.set(4,8,7);soft.castShadow=true;soft.shadow.mapSize.set(2048,2048);soft.shadow.camera.left=-7;soft.shadow.camera.right=7;soft.shadow.camera.top=7;soft.shadow.camera.bottom=-7;scene.add(soft);
-  const rim=new THREE.DirectionalLight(0xa4c7db,4.2);rim.position.set(-6,5,-4);scene.add(rim);
-  const strip=new THREE.PointLight(0xf4c98a,28,12);strip.position.set(3,2,4);scene.add(strip);
-  const back=new THREE.PointLight(0x8ca9b7,32,15);back.position.set(-4,3,-5);scene.add(back);
+  // A studio environment is essential for believable glass: it gives the bottle
+  // real shapes to reflect instead of relying on a flat transparent material.
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const room = new RoomEnvironment();
+  scene.environment = pmrem.fromScene(room, 0.04).texture;
+  room.dispose();
+  pmrem.dispose();
 
-  const bottle=new THREE.Group();scene.add(bottle);
-  const gold=new THREE.MeshPhysicalMaterial({color:0xc5a36b,metalness:.88,roughness:.2});
-  const black=new THREE.MeshPhysicalMaterial({color:0x090a0a,metalness:.72,roughness:.22});
-  const glass=new THREE.MeshPhysicalMaterial({color:0xe0eee9,metalness:.04,roughness:.075,transmission:.96,thickness:.8,ior:1.48,transparent:true,opacity:.34,side:THREE.DoubleSide,depthWrite:false});
-  const liquid=new THREE.MeshPhysicalMaterial({color:0x9a5731,metalness:.08,roughness:.14,transmission:.48,thickness:1.2,ior:1.34,transparent:true,opacity:.88});
-  const darkGlass=new THREE.MeshPhysicalMaterial({color:0x222e2d,metalness:.15,roughness:.1,transmission:.45,thickness:.7,transparent:true,opacity:.55});
+  const key = new THREE.DirectionalLight(0xfff5e8, 3.2);
+  key.position.set(-4, 7, 5);
+  key.castShadow = true;
+  key.shadow.mapSize.set(2048, 2048);
+  key.shadow.camera.left = -4; key.shadow.camera.right = 4;
+  key.shadow.camera.top = 5; key.shadow.camera.bottom = -4;
+  key.shadow.bias = -0.00015;
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, 2.0);
+  fill.position.set(5, 3, 2);
+  scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xd7e6f0, 3.6);
+  rim.position.set(1, 5, -5);
+  scene.add(rim);
+  const warm = new THREE.PointLight(0xe6b879, 34, 12);
+  warm.position.set(-3, 1.4, 3.5);
+  scene.add(warm);
 
-  function roundedShape(w,h,r){
-    const s=new THREE.Shape(),x=-w/2,y=-h/2;
-    s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);
-    s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-    s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
-    s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s;
+  const product = new THREE.Group();
+  scene.add(product);
+  const bottle = new THREE.Group();
+  product.add(bottle);
+
+  const glass = new THREE.MeshPhysicalMaterial({
+    color: 0xffffff, metalness: 0, roughness: 0.035, transmission: 1,
+    thickness: 0.22, ior: 1.5, transparent: false, envMapIntensity: 1.8,
+    clearcoat: 1, clearcoatRoughness: 0.025, attenuationColor: new THREE.Color('#e8d7bd'),
+    attenuationDistance: 2.4
+  });
+  const liquidMat = new THREE.MeshPhysicalMaterial({
+    color: '#b66d37', metalness: 0, roughness: 0.12, transmission: 0.22,
+    thickness: 0.5, ior: 1.34, envMapIntensity: 1.1,
+    attenuationColor: new THREE.Color('#a44e1e'), attenuationDistance: 1.4
+  });
+  const gold = new THREE.MeshPhysicalMaterial({ color: '#b88b50', metalness: 0.92, roughness: 0.19, envMapIntensity: 1.6 });
+  const goldLight = new THREE.MeshPhysicalMaterial({ color: '#e4c58d', metalness: 0.88, roughness: 0.16 });
+  const black = new THREE.MeshPhysicalMaterial({ color: '#171715', metalness: 0.18, roughness: 0.16, clearcoat: 1, clearcoatRoughness: 0.08 });
+
+  function lathe(points, material, segments = 128) {
+    const geometry = new THREE.LatheGeometry(points.map(([r, y]) => new THREE.Vector2(r, y)), segments);
+    geometry.computeVertexNormals();
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.castShadow = true; mesh.receiveShadow = true;
+    bottle.add(mesh);
+    return mesh;
   }
-  function extruded(w,h,d,r,material,z=0,bevel=.1){
-    const geo=new THREE.ExtrudeGeometry(roundedShape(w,h,r),{depth:d,bevelEnabled:true,bevelSegments:5,steps:1,bevelSize:bevel,bevelThickness:bevel,curveSegments:16});
-    geo.center();const mesh=new THREE.Mesh(geo,material);mesh.position.z=z;mesh.castShadow=true;mesh.receiveShadow=true;bottle.add(mesh);return mesh;
-  }
-  // Liquid core behind the glass shell.
-  extruded(1.78,2.58,.64,.25,liquid,-.015,.07).position.y=-.17;
-  extruded(2.05,3.12,.82,.31,glass,0,.12);
-  // Heavy glass foot and shoulder glints.
-  const base=new THREE.Mesh(new THREE.BoxGeometry(1.86,.15,.72),darkGlass);base.position.set(0,-1.48,0);base.castShadow=true;bottle.add(base);
-  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.43,.46,.42,64,1,false),glass);neck.position.y=1.7;neck.castShadow=true;bottle.add(neck);
-  const collar=new THREE.Mesh(new THREE.CylinderGeometry(.49,.49,.17,64),gold);collar.position.y=1.95;collar.castShadow=true;bottle.add(collar);
-  const cap=new THREE.Mesh(new THREE.CylinderGeometry(.4,.43,.88,64,1),black);cap.position.y=2.43;cap.castShadow=true;bottle.add(cap);
-  const capTop=new THREE.Mesh(new THREE.CylinderGeometry(.405,.405,.055,64),gold);capTop.position.y=2.88;bottle.add(capTop);
-  const capRim=new THREE.Mesh(new THREE.TorusGeometry(.415,.018,12,80),gold);capRim.rotation.x=Math.PI/2;capRim.position.y=2.05;bottle.add(capRim);
-  // Original label typography baked into a canvas texture.
-  const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=620;
-  const ctx=canvas.getContext('2d');ctx.fillStyle='#d9d0b9';ctx.fillRect(0,0,1024,620);
-  ctx.strokeStyle='#6d624c';ctx.lineWidth=3;ctx.strokeRect(28,28,968,564);
-  ctx.fillStyle='#29251e';ctx.textAlign='center';ctx.font='500 36px Georgia';ctx.fillText('H E B R E R O   L A B',512,170);
-  ctx.font='italic 112px Georgia';ctx.fillText('NOIR',512,340);
-  ctx.font='26px Arial';ctx.fillText('EAU DE PARFUM  /  001',512,420);
-  ctx.font='18px Arial';ctx.fillText('PARIS · SEVILLA · EVERYWHERE',512,490);
-  const labelTex=new THREE.CanvasTexture(canvas);labelTex.colorSpace=THREE.SRGBColorSpace;
-  const label=new THREE.Mesh(new THREE.PlaneGeometry(1.56,.95),new THREE.MeshStandardMaterial({map:labelTex,roughness:.68,metalness:.08}));label.position.set(0,-.1,.432);bottle.add(label);
-  // Thin glass highlight strips on front edges.
-  const highlightMat=new THREE.MeshBasicMaterial({color:0xe6f5ee,transparent:true,opacity:.42});
-  for(const x of [-.88,.88]){const line=new THREE.Mesh(new THREE.BoxGeometry(.018,2.58,.018),highlightMat);line.position.set(x,0,.443);bottle.add(line);}
-  bottle.position.set(1.35,-.15,0);bottle.rotation.y=-.22;
 
-  // Floating chrome rings and suspended dust create depth in the scene.
-  const haloMat=new THREE.MeshStandardMaterial({color:0xb99b69,metalness:.85,roughness:.24});
-  const halo=new THREE.Mesh(new THREE.TorusGeometry(2.35,.012,12,180),haloMat);halo.rotation.set(1.18,.3,.2);halo.position.set(1.2,.1,-.4);scene.add(halo);
-  const halo2=new THREE.Mesh(new THREE.TorusGeometry(2.8,.006,8,180),new THREE.MeshBasicMaterial({color:0xa8b6b0,transparent:true,opacity:.32}));halo2.rotation.set(.8,-.55,.5);halo2.position.set(1.2,.1,-.8);scene.add(halo2);
-  const floorMat=new THREE.MeshStandardMaterial({color:0x101313,metalness:.58,roughness:.24});
-  const floor=new THREE.Mesh(new THREE.CircleGeometry(200,96),floorMat);floor.rotation.x=-Math.PI/2;floor.position.y=-2.25;floor.receiveShadow=true;scene.add(floor);
-  const plinth=new THREE.Mesh(new THREE.CylinderGeometry(2.4,2.55,.18,96),new THREE.MeshStandardMaterial({color:0x252725,metalness:.8,roughness:.3}));plinth.position.set(1.3,-2.13,0);plinth.receiveShadow=true;plinth.castShadow=true;scene.add(plinth);
-  const edge=new THREE.Mesh(new THREE.TorusGeometry(2.4,.018,12,120),gold);edge.rotation.x=Math.PI/2;edge.position.set(1.3,-2.03,0);scene.add(edge);
-  const dustGeo=new THREE.BufferGeometry(),count=260,positions=new Float32Array(count*3);
-  for(let i=0;i<count;i++){positions[i*3]=(Math.random()-.5)*15;positions[i*3+1]=(Math.random()-.5)*9;positions[i*3+2]=(Math.random()-.5)*8;}
-  dustGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));
-  const dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({color:0xd9c49b,size:.018,transparent:true,opacity:.58}));scene.add(dust);
+  // Thick, closed glass wall with a broad base, curved shoulders and a narrow neck.
+  const shellProfile = [
+    [0.00,-1.72],[0.48,-1.72],[0.61,-1.69],[0.66,-1.62],[0.67,-1.48],
+    [0.67,-0.25],[0.66,0.22],[0.62,0.48],[0.52,0.67],[0.35,0.82],
+    [0.255,0.91],[0.245,1.00],[0.245,1.28],[0.29,1.31],[0.29,1.39],
+    [0.255,1.42],[0.215,1.39],[0.215,1.03],[0.23,0.94],[0.39,0.78],
+    [0.55,0.62],[0.59,0.42],[0.60,-1.43],[0.56,-1.54],[0.00,-1.54]
+  ];
+  lathe(shellProfile, glass, 160);
 
-  const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(1.1,.15,0);controls.enableDamping=true;controls.dampingFactor=.045;controls.enablePan=false;controls.minDistance=7;controls.maxDistance=16;controls.minPolarAngle=.95;controls.maxPolarAngle=2.15;controls.autoRotate=true;controls.autoRotateSpeed=.48;
-  let scroll=0,scrollTarget=0,pointerX=0,pointerY=0;
+  // Amber fragrance fill and a clean, slightly domed meniscus.
+  const liquidProfile = [
+    [0,-1.49],[0.54,-1.49],[0.575,-1.43],[0.575,-0.36],
+    [0.57,-0.31],[0.54,-0.285],[0.48,-0.30],[0.38,-0.32],[0,-0.32]
+  ];
+  lathe(liquidProfile, liquidMat, 128);
+
+  // Heavy optical-glass foot, visible as a bright refracting band.
+  const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.625,0.65,0.15,128), glass);
+  foot.position.y = -1.62; foot.castShadow = true; bottle.add(foot);
+  const baseLine = new THREE.Mesh(new THREE.TorusGeometry(0.645,0.012,12,128), new THREE.MeshPhysicalMaterial({color:'#fff9ec',roughness:.08,metalness:.05,transparent:true,opacity:.6}));
+  baseLine.rotation.x = Math.PI/2; baseLine.position.y = -1.54; bottle.add(baseLine);
+
+  // Neck, crimped metal collar, atomizer button and nozzle.
+  const neckRing = new THREE.Mesh(new THREE.CylinderGeometry(.285,.285,.12,96), gold);
+  neckRing.position.y = 1.38; bottle.add(neckRing);
+  const collar = new THREE.Mesh(new THREE.CylinderGeometry(.27,.275,.2,96), goldLight);
+  collar.position.y = 1.51; bottle.add(collar);
+  const collarBand = new THREE.Mesh(new THREE.TorusGeometry(.27,.012,10,96), gold);
+  collarBand.rotation.x = Math.PI/2; collarBand.position.y = 1.57; bottle.add(collarBand);
+  const pumpStem = new THREE.Mesh(new THREE.CylinderGeometry(.09,.10,.18,48), new THREE.MeshStandardMaterial({color:'#ddd8cd',metalness:.72,roughness:.24}));
+  pumpStem.position.y = 1.68; bottle.add(pumpStem);
+  const actuator = new THREE.Mesh(new THREE.CylinderGeometry(.12,.14,.13,48), new THREE.MeshPhysicalMaterial({color:'#f2eee5',metalness:.42,roughness:.2}));
+  actuator.position.y = 1.79; bottle.add(actuator);
+  const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(.035,.045,.12,24), gold);
+  nozzle.rotation.z = Math.PI/2; nozzle.position.set(.13,1.8,0); bottle.add(nozzle);
+  const nozzleHole = new THREE.Mesh(new THREE.CircleGeometry(.022,24), black);
+  nozzleHole.position.set(.192,1.8,0); nozzleHole.rotation.y = Math.PI/2; bottle.add(nozzleHole);
+
+  // Weighted, lacquered cap with a fine machined gold detail.
+  const cap = new THREE.Mesh(new THREE.CylinderGeometry(.34,.35,.72,128,1), black);
+  cap.position.y = 2.19; cap.castShadow = true; bottle.add(cap);
+  const capTop = new THREE.Mesh(new THREE.CylinderGeometry(.337,.337,.035,128), new THREE.MeshPhysicalMaterial({color:'#282723',metalness:.24,roughness:.18}));
+  capTop.position.y = 2.57; bottle.add(capTop);
+  const capRim = new THREE.Mesh(new THREE.TorusGeometry(.345,.012,12,128), goldLight);
+  capRim.rotation.x = Math.PI/2; capRim.position.y = 1.84; bottle.add(capRim);
+
+  // Front label: restrained, crisp typography and a subtle paper surface.
+  const labelCanvas = document.createElement('canvas');
+  labelCanvas.width = 1200; labelCanvas.height = 760;
+  const c = labelCanvas.getContext('2d');
+  c.fillStyle = '#e8dfcd'; c.fillRect(0,0,1200,760);
+  c.strokeStyle = '#a88d67'; c.lineWidth = 5; c.strokeRect(24,24,1152,712);
+  c.fillStyle = '#25221d'; c.textAlign = 'center';
+  c.font = '500 40px Georgia'; c.fillText('H E B R E R O   L A B',600,190);
+  c.strokeStyle = '#b69a72'; c.lineWidth = 2; c.beginPath(); c.moveTo(330,250); c.lineTo(870,250); c.stroke();
+  c.font = 'italic 178px Georgia'; c.fillText('NOIR',600,470);
+  c.font = '500 34px Arial'; c.fillText('EAU DE PARFUM',600,555);
+  c.font = '24px Arial'; c.fillText('001  /  SEVILLA',600,625);
+  const labelTexture = new THREE.CanvasTexture(labelCanvas);
+  labelTexture.colorSpace = THREE.SRGBColorSpace;
+  const label = new THREE.Mesh(new THREE.PlaneGeometry(.98,.62), new THREE.MeshPhysicalMaterial({map:labelTexture,roughness:.82,metalness:0}));
+  label.position.set(0,-.02,.675); bottle.add(label);
+  const labelFoil = new THREE.Mesh(new THREE.PlaneGeometry(.98,.012), goldLight);
+  labelFoil.position.set(0,.315,.678); bottle.add(labelFoil);
+
+  product.position.set(1.55,-.05,0);
+  product.rotation.y = -.28;
+  product.scale.setScalar(1.03);
+
+  // A sculptural plinth and a seamless warm studio floor.
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(200,200), new THREE.MeshStandardMaterial({color:'#d7d0c5',roughness:.78,metalness:0}));
+  floor.rotation.x = -Math.PI/2; floor.position.y = -1.91; floor.receiveShadow = true; scene.add(floor);
+  const plinthMat = new THREE.MeshPhysicalMaterial({color:'#c8bba7',roughness:.28,metalness:.12,clearcoat:.6});
+  const plinth = new THREE.Mesh(new THREE.CylinderGeometry(1.38,1.48,.24,128),plinthMat);
+  plinth.position.set(1.55,-1.79,0); plinth.castShadow=true; plinth.receiveShadow=true; scene.add(plinth);
+  const plinthEdge = new THREE.Mesh(new THREE.TorusGeometry(1.38,.012,12,128),gold);
+  plinthEdge.rotation.x=Math.PI/2;plinthEdge.position.set(1.55,-1.66,0);scene.add(plinthEdge);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(.95,.22,0); controls.enableDamping=true; controls.dampingFactor=.055;
+  controls.enablePan=false; controls.enableZoom=false;
+  controls.minPolarAngle=1.05; controls.maxPolarAngle=2.0;
+  controls.autoRotate=true; controls.autoRotateSpeed=.38;
+
+  let pointerX=0, pointerY=0, scrollTarget=0, scroll=0;
+  root.addEventListener('pointermove', e => {
+    const rect=root.getBoundingClientRect();
+    pointerX=(e.clientX-rect.left)/rect.width-.5;
+    pointerY=(e.clientY-rect.top)/rect.height-.5;
+  });
   window.addEventListener('scroll',()=>{scrollTarget=Math.min(1,window.scrollY/Math.max(1,window.innerHeight));},{passive:true});
-  root.addEventListener('pointermove',e=>{const r=root.getBoundingClientRect();pointerX=(e.clientX-r.left)/r.width-.5;pointerY=(e.clientY-r.top)/r.height-.5;});
   const resize=()=>{const w=root.clientWidth,h=root.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
-  new ResizeObserver(resize).observe(root);resize();
+  const observer=new ResizeObserver(resize);observer.observe(root);resize();
   const clock=new THREE.Clock();
-  function render(){requestAnimationFrame(render);const t=clock.getElapsedTime();scroll+=(scrollTarget-scroll)*.045;bottle.position.y=-.15+Math.sin(t*.72)*.085-scroll*.65;bottle.rotation.y=-.22+Math.sin(t*.28)*.13+pointerX*.12;bottle.rotation.x=pointerY*.08;halo.rotation.z=t*.11;halo2.rotation.z=-t*.075;dust.rotation.y=t*.018;controls.update();camera.position.x+=((7.2+pointerX*.55)-camera.position.x)*.018;camera.position.y+=((3.5-pointerY*.35-scroll*1.1)-camera.position.y)*.018;renderer.render(scene,camera);}
-  render();root.querySelector('.scene-loading')?.classList.add('loaded');
-  document.querySelector('.scene-hint')?.addEventListener('click',()=>{controls.autoRotate=!controls.autoRotate;});
+  function animate(){
+    requestAnimationFrame(animate);
+    const t=clock.getElapsedTime();
+    scroll+=(scrollTarget-scroll)*.035;
+    product.position.y=-.05+Math.sin(t*.65)*.025-scroll*.25;
+    product.rotation.y=-.28+Math.sin(t*.22)*.045+pointerX*.10;
+    product.rotation.x=pointerY*.035;
+    controls.update();
+    camera.position.x+=(4.25+pointerX*.22-camera.position.x)*.012;
+    camera.position.y+=(2.1-pointerY*.16-scroll*.3-camera.position.y)*.012;
+    renderer.render(scene,camera);
+  }
+  animate();
+  root.querySelector('.scene-loading')?.classList.add('loaded');
+  const hint=root.querySelector('.scene-hint');
+  hint?.addEventListener('click',()=>{controls.autoRotate=!controls.autoRotate;});
   document.querySelector('.hero-3d')?.classList.add('scene-ready');
 }
