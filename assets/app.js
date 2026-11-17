@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('.hl-nav');
  if(menu&&nav)menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));});
  const current=location.pathname.split('/').pop()||'index.html';
- document.querySelectorAll('.hl-nav a').forEach(a=>{if(a.getAttribute('href')===current)a.setAttribute('aria-current','page');});
+ document.querySelectorAll('.hl-nav a').forEach(a=>{if(a.getAttribute('href')===current){a.setAttribute('aria-current','page');a.classList.add('is-current');}});
  document.querySelectorAll('.v2-filters .filter').forEach(btn=>btn.addEventListener('click',()=>{
   document.querySelectorAll('.v2-filters .filter').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
   document.querySelectorAll('.v2-archive-card').forEach(card=>{card.hidden=btn.dataset.filter!=='all'&&card.dataset.category!==btn.dataset.filter;});
