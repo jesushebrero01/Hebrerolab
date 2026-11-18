@@ -30,3 +30,66 @@
 @keyframes atelierScrollPulse{0%,100%{transform:scaleY(.55);opacity:.45}50%{transform:scaleY(1);opacity:1}}
 @media(max-width:800px){.atelier-entry{min-height:560px}.atelier-entry-top,.atelier-entry-bottom{left:7vw;right:7vw;font-size:6px}.atelier-entry-top{top:24px}.atelier-entry-bottom{bottom:23px;gap:12px}.atelier-entry-bottom>span:first-child{max-width:110px;line-height:1.7}.atelier-entry-bottom>span:last-child{display:none}.atelier-entry-symbol{font-size:clamp(58px,16vw,100px);margin-bottom:22px}.atelier-entry-center h1{font-size:clamp(38px,10.4vw,78px)}.atelier-entry-center>p{font-size:7px;letter-spacing:.16em;margin-top:20px}}
 @media(prefers-reduced-motion:reduce){.atelier-entry-center,.atelier-entry-scroll i{animation:none}}
+
+
+/* Unified deep-space canvas across every page and content section */
+:root{
+ --paper:#080b16;--ink:#f0f1f5;--muted:#a0a8bb;
+ --line:rgba(205,216,255,.19);
+ --space-shift:0px;
+}
+html,body.atelier{background:#070a14!important;color:#eef1f8}
+body.atelier{background-image:
+ radial-gradient(1px 1px at 7% 13%,rgba(255,255,255,.82) 50%,transparent 100%),
+ radial-gradient(1px 1px at 18% 72%,rgba(205,220,255,.75) 50%,transparent 100%),
+ radial-gradient(2px 2px at 32% 39%,rgba(255,255,255,.72) 50%,transparent 100%),
+ radial-gradient(1px 1px at 48% 84%,rgba(255,255,255,.68) 50%,transparent 100%),
+ radial-gradient(1px 1px at 63% 22%,rgba(205,220,255,.8) 50%,transparent 100%),
+ radial-gradient(2px 2px at 77% 58%,rgba(255,255,255,.75) 50%,transparent 100%),
+ radial-gradient(1px 1px at 91% 31%,rgba(255,255,255,.8) 50%,transparent 100%),
+ radial-gradient(ellipse at 18% 20%,rgba(49,69,135,.24),transparent 42%),
+ radial-gradient(ellipse at 82% 66%,rgba(87,42,112,.2),transparent 40%),
+ radial-gradient(ellipse at 52% 105%,rgba(25,77,112,.2),transparent 46%)!important;
+ background-size: 370px 370px,510px 510px,620px 620px,440px 440px,560px 560px,700px 700px,480px 480px,100% 100%,100% 100%,100% 100%!important;
+ background-position:0 var(--space-shift),0 calc(var(--space-shift)*-.62),0 calc(var(--space-shift)*-.28),0 calc(var(--space-shift)*-.85),0 calc(var(--space-shift)*-.42),0 calc(var(--space-shift)*-.72),0 calc(var(--space-shift)*-.18),center,center,center!important;
+ background-repeat:repeat,repeat,repeat,repeat,repeat,repeat,repeat,no-repeat,no-repeat,no-repeat!important;
+}
+.atelier-header,.atelier-footer,.atelier-intro,.atelier-work,.atelier-capabilities,.atelier-end,
+.atelier-page-section,.atelier-page-section.soft,.atelier-page-section.dark,.atelier-archive,.atelier-contact{
+ background:transparent!important;color:#eef1f8;
+}
+.atelier-work,.atelier-page-section.soft{background:transparent!important}
+.atelier-kicker{color:#aab2c4;border-color:rgba(205,216,255,.2)}
+.atelier-intro-copy p,.atelier-capabilities-intro p,.atelier-cap-row p,
+.atelier-page-intro p,.atelier-process p,.atelier-archive-note,
+.atelier-contact-copy>p{color:#b5bdce}
+.atelier-intro h2 em,.atelier-work-head h2 em,.atelier-capabilities h2 em,
+.atelier-page-intro h2 em,.atelier-process h3 em,.atelier-contact h1 em{color:#b7c7f4}
+.atelier-text-link,.atelier-project-caption small,.atelier-project-caption>span,
+.atelier-archive-caption small,.atelier-archive-caption>span{color:#b8c1d5}
+.atelier-cap-row,.atelier-process article{border-color:rgba(205,216,255,.2)}
+.atelier-cap-row>span,.atelier-process article>span{color:#9ca9c5}
+.atelier-cap-row p,.atelier-service p{color:#b8c2d4}
+.atelier-service-list,.atelier-service{border-color:rgba(205,216,255,.22)}
+.atelier-service h3,.atelier-cap-row h3,.atelier-process h3,.atelier-project-caption h3,
+.atelier-archive-caption h2{color:#f0f2f8}
+.atelier-service>span,.atelier-service b,.atelier-cap-row b{color:#c5d5ff}
+.atelier-ticker{background:rgba(145,166,220,.12);color:#e4eaff;border-top:1px solid #a8baff25;border-bottom:1px solid #a8baff25}
+.atelier-ticker b{color:#aebff2}
+.atelier-end{color:#f0f2f8}
+.atelier-end-top{color:#aab7d7}
+.atelier-end h2 em{color:#c4d1ff}
+.atelier-end-link{border-color:#aebde5;color:#f3f5fb}
+.atelier-end-link b,.atelier-text-link b{color:#c5d5ff}
+.atelier-footer{border-top:1px solid rgba(205,216,255,.16)}
+.atelier-footer>span,.atelier-footer small{color:#9ba6bd}
+.atelier-contact-form label{color:#b7c1d5}
+.atelier-contact-form input,.atelier-contact-form select,.atelier-contact-form textarea{color:#f1f3fa;border-color:#59647b}
+.atelier-contact-form input::placeholder,.atelier-contact-form textarea::placeholder{color:#8893aa}
+.atelier-contact-form button{background:#dce5ff;color:#111827}
+.atelier-contact-form button b{color:#4d5e88}
+.atelier-contact-form>small{color:#9ca8bf}
+.atelier-page-section.dark{background:transparent!important}
+.atelier-entry{background:#05070e}
+.atelier-inner-hero,.atelier-hero,.atelier-film{background:#080b16}
+@media(prefers-reduced-motion:reduce){body.atelier{background-position:center!important}}
