@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const oldHeight=entry.getBoundingClientRect().height;
   const oldScroll=window.scrollY;
   document.documentElement.classList.add('entry-dismissed');
-  try{sessionStorage.setItem('hebrerolab-entry-dismissed','1')}catch(e){}
+  try{localStorage.setItem('hebrerolab-entry-dismissed','1')}catch(e){}
   entry.remove();
   window.scrollTo(0,Math.max(0,oldScroll-oldHeight));
  };
@@ -19,7 +19,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   else{
    let entryTicking=false;
    const checkEntry=()=>{
-    if(window.scrollY>=window.innerHeight*.68)dismissEntry();
+    const progress=Math.min(1,Math.max(0,window.scrollY/(window.innerHeight*.68)));
+    entry.style.opacity=String(1-progress);
+    entry.style.transform='translateY('+(-progress*5)+'%) scale('+(1-progress*.025)+')';
+    entry.style.pointerEvents=progress>.96?'none':'auto';
+    if(progress>=1)dismissEntry();
     entryTicking=false;
    };
    const onEntryScroll=()=>{if(!entryTicking){window.requestAnimationFrame(checkEntry);entryTicking=true;}};
