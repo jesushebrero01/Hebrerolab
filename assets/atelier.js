@@ -2,28 +2,36 @@ document.addEventListener('DOMContentLoaded',()=>{
  const menu=document.querySelector('.atelier-menu'),nav=document.querySelector('.atelier-nav');
  if(menu&&nav)menu.addEventListener('click',()=>{const open=nav.classList.toggle('is-open');menu.setAttribute('aria-expanded',String(open));});
 
- // The brand entrance fades away progressively as the visitor scrolls into the homepage.
+ // The welcome screen is a one-way entrance: once passed, it is removed
+ // from the document and remembered for this browser tab session.
  const entry=document.querySelector('.atelier-entry');
+ const dismissEntry=()=>{
+  if(!entry||document.documentElement.classList.contains('entry-dismissed'))return;
+  const oldHeight=entry.getBoundingClientRect().height;
+  const oldScroll=window.scrollY;
+  document.documentElement.classList.add('entry-dismissed');
+  try{sessionStorage.setItem('hebrerolab-entry-dismissed','1')}catch(e){}
+  entry.remove();
+  window.scrollTo(0,Math.max(0,oldScroll-oldHeight));
+ };
  if(entry){
-  let ticking=false;
-  const updateEntry=()=>{
-   const distance=Math.max(1,window.innerHeight*.72);
-   const progress=Math.min(1,Math.max(0,window.scrollY/distance));
-   entry.style.opacity=String(1-progress);
-   entry.style.transform='translateY('+(-progress*5)+'%) scale('+(1-progress*.025)+')';
-   entry.style.pointerEvents=progress>.96?'none':'auto';
-   ticking=false;
-  };
-  const onScroll=()=>{if(!ticking){window.requestAnimationFrame(updateEntry);ticking=true;}};
-  updateEntry();
-  window.addEventListener('scroll',onScroll,{passive:true});
-  window.addEventListener('resize',updateEntry);
+  if(document.documentElement.classList.contains('entry-dismissed'))entry.remove();
+  else{
+   let entryTicking=false;
+   const checkEntry=()=>{
+    if(window.scrollY>=window.innerHeight*.68)dismissEntry();
+    entryTicking=false;
+   };
+   const onEntryScroll=()=>{if(!entryTicking){window.requestAnimationFrame(checkEntry);entryTicking=true;}};
+   window.addEventListener('scroll',onEntryScroll,{passive:true});
+   checkEntry();
+  }
  }
 
- // Scroll-driven parallax: the layered starfield drifts at different speeds.
+ // Scroll-driven parallax on the real Hubble photograph.
  let spaceTicking=false;
  const updateSpace=()=>{
-  document.documentElement.style.setProperty('--space-shift',(window.scrollY*.22).toFixed(1)+'px');
+  document.documentElement.style.setProperty('--space-shift',(-window.scrollY*.08).toFixed(1)+'px');
   spaceTicking=false;
  };
  const onSpaceScroll=()=>{if(!spaceTicking){window.requestAnimationFrame(updateSpace);spaceTicking=true;}};
