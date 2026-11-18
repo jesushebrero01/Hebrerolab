@@ -20,6 +20,16 @@ document.addEventListener('DOMContentLoaded',()=>{
   window.addEventListener('resize',updateEntry);
  }
 
+ // Scroll-driven parallax: the layered starfield drifts at different speeds.
+ let spaceTicking=false;
+ const updateSpace=()=>{
+  document.documentElement.style.setProperty('--space-shift',(window.scrollY*.22).toFixed(1)+'px');
+  spaceTicking=false;
+ };
+ const onSpaceScroll=()=>{if(!spaceTicking){window.requestAnimationFrame(updateSpace);spaceTicking=true;}};
+ updateSpace();
+ window.addEventListener('scroll',onSpaceScroll,{passive:true});
+
  const videos=[...document.querySelectorAll('.atelier video')];
  if('IntersectionObserver'in window){
   const observer=new IntersectionObserver(entries=>entries.forEach(({target,isIntersecting})=>{
