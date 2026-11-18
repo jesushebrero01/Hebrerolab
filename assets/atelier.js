@@ -14,5 +14,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   const io=new IntersectionObserver(entries=>entries.forEach(({target,isIntersecting})=>{if(isIntersecting){target.classList.add('is-visible');io.unobserve(target);}}),{threshold:.12});
   reveal.forEach(el=>io.observe(el));
  }else reveal.forEach(el=>el.classList.add('is-visible'));
+ const form=document.querySelector('#contact-form');
+ if(form)form.addEventListener('submit',e=>{
+  e.preventDefault();const data=new FormData(form);
+  const subject=encodeURIComponent('Nuevo contacto HebreroLab — '+data.get('subject'));
+  const body=encodeURIComponent('Nombre: '+data.get('name')+'\\nEmail: '+data.get('email')+'\\nProyecto: '+data.get('subject')+'\\n\\n'+data.get('message'));
+  location.href='mailto:hola@hebrerolab.com?subject='+subject+'&body='+body;
+ });
  document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());
 });
